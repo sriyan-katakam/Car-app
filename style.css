@@ -1,0 +1,752 @@
+/* ============================================================
+   YC RC PRO · ULTRA CATCHY RACING COCKPIT STYLES
+   Hyper-realistic 3D glowing emerald joysticks & floating HUD
+   ============================================================ */
+
+:root {
+    --bg-black:        #020504;
+    --bg-disc:         rgba(10, 22, 17, 0.7);
+    --bg-disc-border:  rgba(0, 229, 153, 0.25);
+    
+    --emerald-core:    #00ffaa;
+    --emerald-primary: #00e599;
+    --emerald-glow:    rgba(0, 255, 170, 0.45);
+    --emerald-halo:    radial-gradient(circle, rgba(0, 255, 170, 0.4) 0%, rgba(0, 200, 130, 0.15) 55%, transparent 75%);
+    --emerald-dark:    #051c13;
+    
+    --text-white:      #ffffff;
+    --text-dim:        #5f8576;
+    --text-emerald:    #00ffaa;
+    
+    --red-alert:       #ff2b54;
+    --amber-warn:      #ffb700;
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    background-color: var(--bg-black);
+    color: var(--text-white);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Montserrat", sans-serif;
+    overflow: hidden;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Atmospheric Backgrounds */
+.carbon-bg {
+    position: fixed;
+    inset: 0;
+    background-image: 
+        radial-gradient(circle at 50% 50%, rgba(0, 255, 170, 0.04) 0%, transparent 60%),
+        linear-gradient(rgba(0, 255, 170, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 170, 0.02) 1px, transparent 1px);
+    background-size: 100% 100%, 32px 32px, 32px 32px;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.ambient-nebula {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 85vw;
+    height: 70vh;
+    background: radial-gradient(ellipse at center, rgba(0, 255, 170, 0.06) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* App Viewport */
+.app-viewport {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    z-index: 1;
+}
+
+/* ============================================================
+   FLOATING TOP HUD
+   ============================================================ */
+.floating-hud {
+    width: 100%;
+    padding: 1rem 1.75rem 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    z-index: 10;
+}
+
+/* Connect Pill */
+.hud-pill {
+    height: 42px;
+    padding: 0 1.25rem;
+    border-radius: 21px;
+    background: var(--bg-disc);
+    border: 1px solid var(--bg-disc-border);
+    backdrop-filter: blur(12px);
+    color: var(--text-white);
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    font-size: 0.8rem;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    transition: transform 0.12s, border-color 0.25s, box-shadow 0.25s, background 0.2s;
+}
+
+.hud-pill:hover {
+    border-color: var(--emerald-primary);
+    background: rgba(0, 255, 170, 0.12);
+    box-shadow: 0 0 18px var(--emerald-glow);
+}
+
+.hud-pill:active {
+    transform: scale(0.96);
+}
+
+.hud-pill.connected {
+    border-color: var(--emerald-core);
+    box-shadow: 0 0 20px var(--emerald-glow);
+}
+
+.bt-glyph {
+    font-size: 1.15rem;
+    color: var(--emerald-core);
+    filter: drop-shadow(0 0 6px var(--emerald-core));
+}
+
+.pill-title {
+    letter-spacing: 0.08em;
+    font-family: monospace;
+}
+
+.beacon-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--red-alert);
+    box-shadow: 0 0 10px rgba(255, 43, 84, 0.7);
+    transition: background 0.3s, box-shadow 0.3s;
+}
+
+.beacon-dot.connected {
+    background: var(--emerald-core);
+    box-shadow: 0 0 12px var(--emerald-core);
+}
+
+.beacon-dot.connecting,
+.beacon-dot.searching {
+    background: var(--amber-warn);
+    box-shadow: 0 0 10px rgba(255, 183, 0, 0.8);
+    animation: beaconPulse 0.9s infinite;
+}
+
+@keyframes beaconPulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.3; transform: scale(0.8); }
+}
+
+/* Center Horizon Ticker */
+.hud-center-ticker {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    opacity: 0.7;
+}
+
+.hud-horizon-line {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.ticker-tick {
+    width: 6px;
+    height: 2px;
+    background: var(--text-dim);
+    border-radius: 1px;
+}
+
+.ticker-tick.center-tick {
+    width: 16px;
+    height: 3px;
+    background: var(--emerald-primary);
+    box-shadow: 0 0 8px var(--emerald-core);
+}
+
+.hud-tx-pulse {
+    display: flex;
+    gap: 0.3rem;
+}
+
+.pulse-chip {
+    font-size: 0.58rem;
+    font-weight: 800;
+    font-family: monospace;
+    color: var(--text-dim);
+    padding: 0.1rem 0.35rem;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.pulse-chip.active {
+    color: #000;
+    background: var(--emerald-core);
+    box-shadow: 0 0 8px var(--emerald-core);
+}
+
+/* Right Floating Action Discs */
+.floating-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.hud-disc-btn {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: var(--bg-disc);
+    border: 1px solid var(--bg-disc-border);
+    backdrop-filter: blur(12px);
+    color: var(--text-white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    transition: transform 0.12s, border-color 0.2s, background 0.2s, box-shadow 0.2s, color 0.2s;
+}
+
+.hud-disc-btn:hover {
+    border-color: var(--emerald-primary);
+    color: var(--emerald-core);
+    background: rgba(0, 255, 170, 0.15);
+    box-shadow: 0 0 16px var(--emerald-glow);
+}
+
+.hud-disc-btn:active {
+    transform: scale(0.92);
+}
+
+.hud-disc-btn.active {
+    background: var(--emerald-core);
+    color: #000;
+    border-color: var(--emerald-core);
+    box-shadow: 0 0 20px var(--emerald-glow);
+}
+
+.park-disc .park-text {
+    font-size: 1.15rem;
+    font-weight: 900;
+    font-family: monospace;
+}
+
+.park-disc.active {
+    background: var(--red-alert);
+    border-color: var(--red-alert);
+    color: #fff;
+    box-shadow: 0 0 20px rgba(255, 43, 84, 0.7);
+}
+
+/* ============================================================
+   MAIN COCKPIT ARENA & DUAL GLOWING JOYSTICKS
+   ============================================================ */
+.cockpit-arena {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 4rem 2rem;
+    position: relative;
+    z-index: 5;
+}
+
+/* Joystick Columns */
+.joystick-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.85rem;
+}
+
+.joystick-telemetry {
+    font-size: 0.72rem;
+    font-weight: 800;
+    font-family: monospace;
+    color: var(--text-dim);
+    letter-spacing: 0.14em;
+    text-shadow: 0 0 6px rgba(0, 0, 0, 0.8);
+}
+
+/* Pod Frame */
+.joystick-pod {
+    position: relative;
+    width: 210px;
+    height: 210px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    touch-action: none;
+}
+
+/* Dual Radial Glow Halos */
+.joystick-halo-outer {
+    position: absolute;
+    inset: -25px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0, 255, 170, 0.3) 0%, rgba(0, 220, 140, 0.1) 50%, transparent 75%);
+    pointer-events: none;
+    filter: blur(14px);
+    transition: transform 0.25s, opacity 0.25s;
+    animation: haloBreathe 3s infinite ease-in-out;
+}
+
+@keyframes haloBreathe {
+    0%, 100% { transform: scale(1); opacity: 0.8; }
+    50% { transform: scale(1.08); opacity: 1; }
+}
+
+.joystick-halo-inner {
+    position: absolute;
+    inset: -6px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0, 255, 170, 0.45) 0%, rgba(0, 200, 130, 0.15) 60%, transparent 80%);
+    pointer-events: none;
+    filter: blur(6px);
+    transition: transform 0.15s;
+}
+
+.joystick-pod.active .joystick-halo-inner {
+    transform: scale(1.15);
+    background: radial-gradient(circle, rgba(0, 255, 170, 0.65) 0%, rgba(0, 220, 140, 0.25) 60%, transparent 85%);
+}
+
+/* Concave 3D Spherical Well */
+.joystick-well {
+    position: relative;
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #051a13 0%, #020906 60%, #092c20 100%);
+    border: 2px solid rgba(0, 255, 170, 0.32);
+    box-shadow: 
+        inset 0 12px 32px rgba(0, 0, 0, 0.95),
+        0 0 24px rgba(0, 255, 170, 0.25),
+        inset 0 0 16px rgba(0, 255, 170, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: grab;
+    overflow: hidden;
+}
+
+.joystick-well:active {
+    cursor: grabbing;
+}
+
+/* Subtle Inner Track Ring */
+.well-track-ring {
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 1px dashed rgba(0, 255, 170, 0.15);
+    pointer-events: none;
+}
+
+/* Directional Chevrons (Illuminate in green on movement!) */
+.chevron {
+    position: absolute;
+    font-size: 1.15rem;
+    font-weight: 900;
+    color: rgba(0, 255, 170, 0.2);
+    pointer-events: none;
+    transition: color 0.12s, text-shadow 0.12s, transform 0.12s;
+}
+
+.chevron-left  { left: 14px; top: calc(50% - 10px); }
+.chevron-right { right: 14px; top: calc(50% - 10px); }
+.chevron-up    { top: 12px; left: calc(50% - 8px); }
+.chevron-down  { bottom: 12px; left: calc(50% - 8px); }
+
+.chevron.active {
+    color: var(--emerald-core);
+    text-shadow: 0 0 14px var(--emerald-core);
+    transform: scale(1.25);
+}
+
+/* Draggable 3D Ceramic Knob */
+.joystick-knob {
+    position: absolute;
+    width: 68px;
+    height: 68px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #ffffff 0%, #edf5f1 55%, #c8ddd4 100%);
+    box-shadow: 
+        0 12px 28px rgba(0, 0, 0, 0.8),
+        0 0 20px rgba(255, 255, 255, 0.5),
+        inset 0 -3px 6px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    transition: transform 0.06s ease-out;
+}
+
+/* 3D Specular Highlight */
+.knob-specular {
+    position: absolute;
+    top: 6px;
+    left: 12px;
+    width: 22px;
+    height: 12px;
+    border-radius: 50%;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0) 100%);
+    transform: rotate(-25deg);
+    pointer-events: none;
+}
+
+.knob-icon {
+    font-size: 1.35rem;
+    font-weight: 900;
+    letter-spacing: -0.05em;
+    color: #00995c;
+    text-align: center;
+    line-height: 0.85;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+/* ============================================================
+   CENTER HORIZON SPACE & HEADLIGHT BEAM
+   ============================================================ */
+.center-cockpit-space {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    pointer-events: none;
+}
+
+/* Headlight Projection Beam */
+.headlight-cone {
+    position: absolute;
+    top: -120px;
+    width: 260px;
+    height: 140px;
+    background: radial-gradient(ellipse at bottom, rgba(0, 255, 170, 0.35) 0%, transparent 70%);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease-out;
+}
+
+.headlight-cone.active {
+    opacity: 1;
+    filter: drop-shadow(0 0 24px var(--emerald-core));
+}
+
+/* Minimalist Center Speed Badge */
+.center-speed-badge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.15rem;
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(0, 255, 170, 0.15);
+    padding: 0.35rem 0.95rem;
+    border-radius: 20px;
+    backdrop-filter: blur(8px);
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.center-speed-badge.driving {
+    border-color: var(--emerald-primary);
+    box-shadow: 0 0 14px rgba(0, 255, 170, 0.3);
+}
+
+.live-speed {
+    font-size: 1.15rem;
+    font-weight: 900;
+    font-family: monospace;
+    color: #fff;
+    line-height: 1;
+}
+
+.live-state {
+    font-size: 0.58rem;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    color: var(--text-dim);
+}
+
+.center-speed-badge.driving .live-state {
+    color: var(--emerald-core);
+}
+
+/* ============================================================
+   SLIDE-OUT SETTINGS & CALIBRATION DRAWER
+   ============================================================ */
+.settings-drawer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 320px;
+    max-width: 85vw;
+    background: #050d0a;
+    border-left: 1px solid rgba(0, 255, 170, 0.2);
+    backdrop-filter: blur(18px);
+    box-shadow: -12px 0 40px rgba(0, 0, 0, 0.8);
+    transform: translateX(100%);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+}
+
+.settings-drawer.open {
+    transform: translateX(0);
+}
+
+.drawer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.15rem 1.25rem;
+    border-bottom: 1px solid rgba(0, 255, 170, 0.15);
+}
+
+.drawer-title {
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    color: var(--emerald-core);
+}
+
+.close-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-dim);
+    font-size: 1.25rem;
+    cursor: pointer;
+}
+
+.close-btn:hover {
+    color: #fff;
+}
+
+.drawer-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-label-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.form-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--text-dim);
+}
+
+.speed-val {
+    font-size: 0.8rem;
+    font-weight: 900;
+    color: var(--emerald-core);
+    font-family: monospace;
+}
+
+.drawer-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 7px;
+    border-radius: 4px;
+    background: #0d261c;
+    border: 1px solid rgba(0, 255, 170, 0.25);
+    outline: none;
+    cursor: pointer;
+}
+
+.drawer-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--emerald-core);
+    box-shadow: 0 0 12px var(--emerald-core);
+    cursor: pointer;
+    border: 2px solid #000;
+}
+
+.preset-chips {
+    display: flex;
+    gap: 0.35rem;
+    margin-top: 0.25rem;
+}
+
+.preset-chip {
+    flex: 1;
+    padding: 0.3rem 0;
+    font-size: 0.65rem;
+    font-weight: 800;
+    font-family: monospace;
+    color: var(--text-dim);
+    background: #091712;
+    border: 1px solid rgba(0, 255, 170, 0.2);
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.preset-chip:hover {
+    color: #fff;
+    border-color: var(--emerald-primary);
+}
+
+.preset-chip.active {
+    color: #000;
+    background: var(--emerald-core);
+    border-color: var(--emerald-core);
+    box-shadow: 0 0 8px var(--emerald-glow);
+}
+
+.form-select {
+    padding: 0.6rem;
+    background: #030a07;
+    border: 1px solid rgba(0, 255, 170, 0.25);
+    border-radius: 6px;
+    color: var(--emerald-core);
+    font-size: 0.76rem;
+    font-weight: 700;
+    outline: none;
+}
+
+.byte-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.45rem;
+}
+
+.byte-btn {
+    padding: 0.45rem 0.2rem;
+    font-size: 0.68rem;
+    font-weight: 700;
+    font-family: monospace;
+    color: var(--text-white);
+    background: #0d221a;
+    border: 1px solid rgba(0, 255, 170, 0.2);
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.byte-btn:hover {
+    border-color: var(--emerald-core);
+    color: var(--emerald-core);
+}
+
+.byte-btn:active {
+    background: var(--emerald-core);
+    color: #000;
+}
+
+.gatt-table {
+    display: flex;
+    flex-direction: column;
+    background: #030806;
+    border: 1px solid rgba(0, 255, 170, 0.15);
+    border-radius: 8px;
+    padding: 0.5rem 0.75rem;
+}
+
+.gatt-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.38rem 0;
+    font-size: 0.72rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.gatt-row:last-child {
+    border-bottom: none;
+}
+
+.g-key {
+    color: var(--text-dim);
+}
+
+.g-val {
+    font-family: monospace;
+    color: #fff;
+}
+
+.g-val.hex-text {
+    color: var(--emerald-core);
+    font-weight: 700;
+}
+
+.g-val.error-text {
+    color: var(--amber-warn);
+}
+
+/* ============================================================
+   RESPONSIVE (Portrait Orientation Stacking)
+   ============================================================ */
+@media (max-width: 600px) and (orientation: portrait) {
+    .floating-hud {
+        padding: 0.85rem 1rem 0.35rem;
+    }
+
+    .cockpit-arena {
+        flex-direction: column;
+        justify-content: space-around;
+        padding: 0.5rem 1rem 2rem;
+    }
+
+    .joystick-pod {
+        width: 165px;
+        height: 165px;
+    }
+
+    .joystick-well {
+        width: 145px;
+        height: 145px;
+    }
+
+    .joystick-knob {
+        width: 55px;
+        height: 55px;
+    }
+
+    .center-cockpit-space {
+        margin: 0.5rem 0;
+    }
+}

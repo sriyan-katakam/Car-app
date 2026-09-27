@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#020504">
+    <title>YC RC Pro Controller</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="theme-app">
+
+    <!-- Atmospheric Glow & Carbon Fiber Background -->
+    <div class="carbon-bg"></div>
+    <div class="ambient-nebula"></div>
+
+    <!-- Main Cockpit Viewport -->
+    <div class="app-viewport">
+
+        <!-- Top Floating HUD Layer -->
+        <header class="floating-hud">
+            
+            <!-- Left Corner: Device Connection Pill -->
+            <button id="connect-btn" class="hud-pill connect-pill" title="Click to Connect Bluetooth">
+                <span class="bt-glyph">⟁</span>
+                <span id="device-label" class="pill-title">YC_CAR_DEMO</span>
+                <span id="status-dot" class="beacon-dot disconnected"></span>
+            </button>
+
+            <!-- Center Subtle Horizon Ticker -->
+            <div class="hud-center-ticker">
+                <div class="hud-horizon-line">
+                    <span class="ticker-tick"></span>
+                    <span class="ticker-tick"></span>
+                    <span class="ticker-tick center-tick"></span>
+                    <span class="ticker-tick"></span>
+                    <span class="ticker-tick"></span>
+                </div>
+                <div class="hud-tx-pulse" id="tx-pulse-indicator">
+                    <span id="tx-led" class="pulse-chip">TX</span>
+                    <span id="rx-led" class="pulse-chip">RX</span>
+                </div>
+            </div>
+
+            <!-- Right Corner: Floating Action Discs -->
+            <div class="floating-actions">
+                <!-- Headlights -->
+                <button id="headlight-btn" class="hud-disc-btn" title="Headlights">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                        <path d="M12 4C7.58 4 4 7.58 4 12s3.58 8 8 8v-2c-3.31 0-6-2.69-6-6s2.69-6 6-6V4zm2 2v2h6V6h-6zm0 5v2h7v-2h-7zm0 5v2h6v-2h-6z"/>
+                    </svg>
+                </button>
+
+                <!-- Park / Emergency Brake -->
+                <button id="park-btn" class="hud-disc-btn park-disc" title="Emergency Brake (P)">
+                    <span class="park-text">P</span>
+                </button>
+
+                <!-- Horn -->
+                <button id="horn-btn" class="hud-disc-btn" title="Horn">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                        <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+                    </svg>
+                </button>
+
+                <!-- Sound FX Toggle -->
+                <button id="sound-toggle-btn" class="hud-disc-btn" title="SFX Mute/Unmute">
+                    <span>🔊</span>
+                </button>
+
+                <!-- Settings / Protocol Calibration Drawer -->
+                <button id="settings-btn" class="hud-disc-btn" title="Settings & Protocol">
+                    <svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor">
+                        <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
+                    </svg>
+                </button>
+            </div>
+
+        </header>
+
+        <!-- Main Cockpit Arena: Dual Catchy Glowing Joysticks -->
+        <main class="cockpit-arena">
+
+            <!-- LEFT JOYSTICK: STEERING (< >) -->
+            <div class="joystick-column zone-left">
+                <div class="joystick-pod" id="steer-pod">
+                    <!-- Dynamic Glowing Halos -->
+                    <div class="joystick-halo-outer"></div>
+                    <div class="joystick-halo-inner"></div>
+
+                    <!-- 3D Spherical Concave Well -->
+                    <div class="joystick-well" id="steer-well">
+                        <!-- Directional Glow Indicators -->
+                        <div class="chevron chevron-left" id="chevron-left">◀</div>
+                        <div class="chevron chevron-right" id="chevron-right">▶</div>
+
+                        <!-- Track Ring -->
+                        <div class="well-track-ring"></div>
+
+                        <!-- Draggable 3D Ceramic Knob -->
+                        <div class="joystick-knob" id="steer-knob">
+                            <div class="knob-specular"></div>
+                            <span class="knob-icon">⟨ ⟩</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="joystick-telemetry">STEERING · [A / D]</div>
+            </div>
+
+            <!-- CENTER HORIZON SPACE -->
+            <div class="center-cockpit-space">
+                <div class="headlight-cone" id="headlight-beam"></div>
+                <div class="center-speed-badge">
+                    <span class="live-speed" id="hud-speed-text">100%</span>
+                    <span class="live-state" id="hud-state-text">STANDBY</span>
+                </div>
+            </div>
+
+            <!-- RIGHT JOYSTICK: THROTTLE (︿ ﹀) -->
+            <div class="joystick-column zone-right">
+                <div class="joystick-pod" id="throttle-pod">
+                    <!-- Dynamic Glowing Halos -->
+                    <div class="joystick-halo-outer"></div>
+                    <div class="joystick-halo-inner"></div>
+
+                    <!-- 3D Spherical Concave Well -->
+                    <div class="joystick-well" id="throttle-well">
+                        <!-- Directional Glow Indicators -->
+                        <div class="chevron chevron-up" id="chevron-up">▲</div>
+                        <div class="chevron chevron-down" id="chevron-down">▼</div>
+
+                        <!-- Track Ring -->
+                        <div class="well-track-ring"></div>
+
+                        <!-- Draggable 3D Ceramic Knob -->
+                        <div class="joystick-knob" id="throttle-knob">
+                            <div class="knob-specular"></div>
+                            <span class="knob-icon">︿<br>﹀</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="joystick-telemetry">THROTTLE · [W / S]</div>
+            </div>
+
+        </main>
+
+        <!-- Slide-out Settings & Calibration Drawer -->
+        <aside class="settings-drawer" id="settings-drawer">
+            <div class="drawer-header">
+                <span class="drawer-title">⚙️ BLE PROTOCOL &amp; CALIBRATION</span>
+                <button id="close-drawer-btn" class="close-btn">✕</button>
+            </div>
+            <div class="drawer-body">
+                
+                <!-- Speed Output Control -->
+                <div class="form-group">
+                    <div class="form-label-row">
+                        <label class="form-label" for="speed-slider">Speed / Power Output:</label>
+                        <span class="speed-val" id="drawer-speed-val">100%</span>
+                    </div>
+                    <input type="range" id="speed-slider" class="drawer-slider" min="30" max="100" value="100">
+                    <div class="preset-chips">
+                        <button class="preset-chip" data-speed="30">30%</button>
+                        <button class="preset-chip" data-speed="60">60%</button>
+                        <button class="preset-chip" data-speed="80">80%</button>
+                        <button class="preset-chip active" data-speed="100">100%</button>
+                    </div>
+                </div>
+
+                <!-- Protocol Presets -->
+                <div class="form-group">
+                    <label class="form-label" for="preset-selector">Command Protocol Preset:</label>
+                    <select id="preset-selector" class="form-select">
+                        <option value="yc_standard" selected>YC Standard (0x40 Base with Play-Bit: 0x41/42/44/48) ★ Recommended</option>
+                        <option value="yc_raw">Raw Nibble (No 0x40 Play-Bit: 0x01/02/04/08)</option>
+                        <option value="sequential">Sequential Enum (0x01/0x02/0x03/0x04)</option>
+                    </select>
+                </div>
+
+                <!-- Direct Hex Byte Injector -->
+                <div class="form-group">
+                    <span class="form-label">Quick Hex Byte Injector:</span>
+                    <div class="byte-grid">
+                        <button class="byte-btn" onclick="sendCustomHexByte('41')">Fwd 0x41</button>
+                        <button class="byte-btn" onclick="sendCustomHexByte('42')">Rev 0x42</button>
+                        <button class="byte-btn" onclick="sendCustomHexByte('44')">Left 0x44</button>
+                        <button class="byte-btn" onclick="sendCustomHexByte('48')">Right 0x48</button>
+                        <button class="byte-btn" onclick="sendCustomHexByte('40')">Stop 0x40</button>
+                        <button class="byte-btn" onclick="sendCustomHexByte('00')">Zero 0x00</button>
+                    </div>
+                </div>
+
+                <!-- Live GATT Telemetry Table -->
+                <div class="gatt-table">
+                    <div class="gatt-row">
+                        <span class="g-key">Device</span>
+                        <span class="g-val" id="debug-device">YC_CAR_DEMO</span>
+                    </div>
+                    <div class="gatt-row">
+                        <span class="g-key">Service</span>
+                        <span class="g-val">0xFFF0</span>
+                    </div>
+                    <div class="gatt-row">
+                        <span class="g-key">Write Char</span>
+                        <span class="g-val">0xFFF2</span>
+                    </div>
+                    <div class="gatt-row">
+                        <span class="g-key">Notify Char</span>
+                        <span class="g-val">0xFFF1</span>
+                    </div>
+                    <div class="gatt-row">
+                        <span class="g-key">Status</span>
+                        <span class="g-val" id="debug-conn-status">Disconnected</span>
+                    </div>
+                    <div class="gatt-row">
+                        <span class="g-key">Last TX</span>
+                        <span class="g-val hex-text" id="debug-last-tx">—</span>
+                    </div>
+                    <div class="gatt-row">
+                        <span class="g-key">Last RX</span>
+                        <span class="g-val hex-text" id="debug-last-rx">—</span>
+                    </div>
+                    <div class="gatt-row">
+                        <span class="g-key">Diagnostics</span>
+                        <span class="g-val error-text" id="debug-error">Ready</span>
+                    </div>
+                </div>
+
+            </div>
+        </aside>
+
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
